@@ -3,20 +3,17 @@
 
 module tb ();
 
-  // Dump signals for waveform viewing
   initial begin
     $dumpfile("tb.fst");
     $dumpvars(0, tb);
   end
 
-  // Inputs
   reg clk;
   reg rst_n;
   reg ena;
   reg [7:0] ui_in;
   reg [7:0] uio_in;
 
-  // Outputs
   wire [7:0] uo_out;
   wire [7:0] uio_out;
   wire [7:0] uio_oe;
@@ -26,7 +23,6 @@ module tb ();
   wire VGND = 1'b0;
 `endif
 
-  // Instantiate DUT
   tt_um_example user_project (
 `ifdef GL_TEST
       .VPWR(VPWR),
@@ -41,27 +37,5 @@ module tb ();
       .clk(clk),
       .rst_n(rst_n)
   );
-
-  // Clock generation (10ns period)
-  always #5 clk = ~clk;
-
-  // Test sequence
-  initial begin
-    // Initialize
-    clk = 0;
-    rst_n = 0;
-    ena = 1;
-    ui_in = 8'b00000000;
-    uio_in = 8'b00000000;
-
-    // Hold reset
-    #20;
-    rst_n = 1;   // Release reset
-
-    // Run counter for some time
-    #200;
-
-    $finish;
-  end
 
 endmodule
