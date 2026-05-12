@@ -7,34 +7,40 @@ from cocotb.triggers import ClockCycles
 
 
 @cocotb.test()
-async def test_project(dut):
-    dut._log.info("Start")
+async def test_upcounter(dut):
+    dut._log.info("Starting Up Counter Test")
 
-    # Set the clock period to 10 us (100 KHz)
+    # Create 10 us clock
     clock = Clock(dut.clk, 10, unit="us")
     cocotb.start_soon(clock.start())
 
-    # Reset
-    dut._log.info("Reset")
+    # Initialize signals
     dut.ena.value = 1
     dut.ui_in.value = 0
     dut.uio_in.value = 0
+
+    # Apply reset
     dut.rst_n.value = 0
-    await ClockCycles(dut.clk, 10)
+    await ClockCycles(dut.clk, 5)
+
+    # Check reset value
+    assert dut.uo_out.value == 0, "Counter should be 0 after reset"
+
+    # Release reset
     dut.rst_n.value = 1
 
-    dut._log.info("Test project behavior")
+    # Check counting sequence
+    for i in range(1, 16):
+        await ClockCycles(dut.clk, 1)
+        expected = i & 0x0F   # 4-bit wraparound
+        actual = int(dut.uo_out.value) & 0x0F
 
-    # Set the input values you want to test
-    dut.ui_in.value = 20
-    dut.uio_in.value = 30
+        dut._log.info(f"Expected: {expected}, Actual: {actual}")
 
-    # Wait for one clock cycle to see the output values
+        assert actual == expected, f"Counter mismatch! Expected {expected}, got {actual}"
+
+    # Check overflow (1111 -> 0000)
     await ClockCycles(dut.clk, 1)
+    assert (int(dut.uo_out.value) & 0x0F) == 0, "Counter should wrap to 0"
 
-    # The following assersion is just an example of how to check the output values.
-    # Change it to match the actual expected output of your module:
-    assert dut.uo_out.value == 50
-
-    # Keep testing the module by changing the input values, waiting for
-    # one or more clock cycles, and asserting the expected output values.
+    dut._log.info("Up Counter Test Passed")
