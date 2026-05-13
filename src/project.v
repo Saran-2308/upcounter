@@ -1,10 +1,6 @@
 `default_nettype none
 
 module tt_um_upcounter (
-`ifdef GL_TEST
-    input VPWR,
-    input VGND,
-`endif
     input  wire [7:0] ui_in,
     output wire [7:0] uo_out,
     input  wire [7:0] uio_in,
@@ -19,7 +15,7 @@ module tt_um_upcounter (
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
-            counter <= 0;
+            counter <= 4'b0;
         else
             counter <= counter + 1'b1;
     end
