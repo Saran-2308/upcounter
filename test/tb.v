@@ -11,6 +11,7 @@ module tb;
   reg clk;
   reg rst_n;
   reg ena;
+
   reg [7:0] ui_in;
   reg [7:0] uio_in;
 
@@ -19,10 +20,6 @@ module tb;
   wire [7:0] uio_oe;
 
   tt_um_upcounter dut (
-`ifdef GL_TEST
-      .VPWR(1'b1),
-      .VGND(1'b0),
-`endif
       .ui_in(ui_in),
       .uo_out(uo_out),
       .uio_in(uio_in),
