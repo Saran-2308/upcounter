@@ -1,19 +1,19 @@
 `default_nettype none
 `timescale 1ns / 1ps
 
-module tb;
+module tb ();
 
   initial begin
     $dumpfile("tb.fst");
     $dumpvars(0, tb);
   end
 
-  reg clk = 0;
-  reg rst_n = 0;
-  reg ena = 1;
+  reg clk;
+  reg rst_n;
+  reg ena;
 
-  reg [7:0] ui_in  = 8'b0;
-  reg [7:0] uio_in = 8'b0;
+  reg [7:0] ui_in;
+  reg [7:0] uio_in;
 
   wire [7:0] uo_out;
   wire [7:0] uio_out;
@@ -38,14 +38,5 @@ module tb;
       .clk(clk),
       .rst_n(rst_n)
   );
-
-  // 100 MHz clock
-  always #5 clk = ~clk;
-
-  // Reset sequence
-  initial begin
-    #20;
-    rst_n = 1;
-  end
 
 endmodule
