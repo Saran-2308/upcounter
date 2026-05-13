@@ -8,12 +8,12 @@ module tb;
     $dumpvars(0, tb);
   end
 
-  reg clk;
-  reg rst_n;
-  reg ena;
+  reg clk = 0;
+  reg rst_n = 0;
+  reg ena = 1;
 
-  reg [7:0] ui_in;
-  reg [7:0] uio_in;
+  reg [7:0] ui_in = 0;
+  reg [7:0] uio_in = 0;
 
   wire [7:0] uo_out;
   wire [7:0] uio_out;
