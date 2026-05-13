@@ -11,16 +11,16 @@ module tt_um_upcounter (
     input  wire       rst_n
 );
 
-    reg [3:0] count;
+    reg [3:0] counter;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
-            count <= 0;
+            counter <= 0;
         else
-            count <= count + 1'b1;
+            counter <= counter + 1'b1;
     end
 
-    assign uo_out = {4'b0, count};
+    assign uo_out = {4'b0, counter};
     assign uio_out = 0;
     assign uio_oe  = 0;
 
