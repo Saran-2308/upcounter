@@ -2,7 +2,7 @@
 
 module tt_um_example (
     input  wire [7:0] ui_in,
-    output wire [7:0] uo_out,
+    output reg  [7:0] uo_out,
     input  wire [7:0] uio_in,
     output wire [7:0] uio_out,
     output wire [7:0] uio_oe,
@@ -20,11 +20,11 @@ module tt_um_example (
             counter <= counter + 1'b1;
     end
 
-    assign uo_out = {4'b0000, counter};
+    always @(*) begin
+        uo_out = {4'b0000, counter};
+    end
 
     assign uio_out = 8'b00000000;
     assign uio_oe  = 8'b00000000;
-
-    wire _unused = &{ui_in, uio_in, 1'b0};
 
 endmodule
