@@ -1,6 +1,10 @@
 `default_nettype none
 
 module tt_um_upcounter (
+`ifdef GL_TEST
+    input VPWR,
+    input VGND,
+`endif
     input  wire [7:0] ui_in,
     output wire [7:0] uo_out,
     input  wire [7:0] uio_in,
@@ -20,8 +24,7 @@ module tt_um_upcounter (
             counter <= counter + 1'b1;
     end
 
-    assign uo_out = {4'b0000, counter};
-
+    assign uo_out  = {4'b0, counter};
     assign uio_out = 8'b0;
     assign uio_oe  = 8'b0;
 
