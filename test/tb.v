@@ -8,18 +8,18 @@ module tb;
     $dumpvars(0, tb);
   end
 
-  reg clk = 0;
-  reg rst_n = 1;
-  reg ena = 0;
+  reg clk;
+  reg rst_n;
+  reg ena;
 
-  reg [7:0] ui_in = 0;
-  reg [7:0] uio_in = 0;
+  reg [7:0] ui_in;
+  reg [7:0] uio_in;
 
   wire [7:0] uo_out;
   wire [7:0] uio_out;
   wire [7:0] uio_oe;
 
-  tt_um_upcounter dut (
+  tt_um_example dut (
       .ui_in(ui_in),
       .uo_out(uo_out),
       .uio_in(uio_in),
