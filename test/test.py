@@ -5,30 +5,29 @@ from cocotb.triggers import ClockCycles
 @cocotb.test()
 async def test_upcounter(dut):
 
-    # Start clock
-    cocotb.start_soon(Clock(dut.clk, 10, units="us").start())
+    cocotb.start_soon(Clock(dut.clk, 10, unit="us").start())
 
-    # Initial values
     dut.ena.value = 1
     dut.ui_in.value = 0
     dut.uio_in.value = 0
 
-    # Reset (active low)
+    # RESET (IMPORTANT FIX)
     dut.rst_n.value = 0
-    await ClockCycles(dut.clk, 2)
+    await ClockCycles(dut.clk, 5)
 
     dut.rst_n.value = 1
     await ClockCycles(dut.clk, 1)
 
-    # Check first increment
-    assert int(dut.uo_out.value) == 1, f"Expected 1, got {dut.uo_out.value}"
+    # FIRST VALUE MUST BE 1
+    val = int(dut.uo_out.value)
+    assert val == 1, f"Expected 1, got {val}"
 
-    # Check counting 1 → 15
+    # COUNT LOOP
     for i in range(2, 16):
         await ClockCycles(dut.clk, 1)
-        actual = int(dut.uo_out.value) & 0xF
-        assert actual == i, f"Expected {i}, got {actual}"
+        val = int(dut.uo_out.value) & 0xF
+        assert val == i, f"Expected {i}, got {val}"
 
-    # Overflow check (15 → 0)
+    # OVERFLOW
     await ClockCycles(dut.clk, 1)
     assert (int(dut.uo_out.value) & 0xF) == 0
